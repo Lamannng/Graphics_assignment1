@@ -6,8 +6,8 @@ window.onload = () => {
     return;
   }
 
-  let program = initShaders(gl, "vertex-shader", "fragment-shader");
-  gl.useProgram(program);
+      let program = initShaders(gl, "vertex-shader", "fragment-shader");
+  gl.useProgram(program) ;
 
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
