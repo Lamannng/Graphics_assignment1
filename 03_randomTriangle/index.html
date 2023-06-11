@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<head>
+
+  <script type="x-shader/x-vertex" id="vertex-shader">
+    attribute vec4 position;
+    void main(void) {
+        gl_Position = position;
+    }
+  </script>
+  
+
+  <script type="x-shader/x-fragment" id="fragment-shader">
+    precision mediump float;
+    uniform vec4 uColor; // Add a uniform variable for color
+    void main(void) {
+        gl_FragColor = uColor; // Set the fragment color to the value of the uniform variable
+    }
+  </script>
+  
+   
+  <script src="../_common/webgl-utils.js"></script>
+  <script src="../_common/MV.js"></script>
+  <script src="../_common/initShaders.js"></script>
+  <script src="./app.js"></script>
+  <script>
+    onload = () => {
+      let canvas = document.getElementById("webgl-canvas");
+
+      let gl = WebGLUtils.setupWebGL(canvas);
+      if (!gl) {
+        alert("Couldn't setup webgl");
+        return;
+      }
+
+      let program = initShaders(gl, "vertex-shader", "fragment-shader");
+      gl.useProgram(program);
+
+      let vertices = [-0.5, -0.5, 0.0, 0.5, 0.5, -0.5];
+
+      let vertexBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+      let vPosition = gl.getAttribLocation(program, "position");
+      gl.vertexAttribPointer(vPosition, 2, gl.FLOAT, false, 0, 0);
+      gl.enableVertexAttribArray(vPosition);
+
+      let uColor = gl.getUniformLocation(program, "uColor"); // Get the location of the uniform variable
+      let randomColor = [Math.random(), Math.random(), Math.random(), 1.0]; // Generate a random color
+      gl.uniform4fv(uColor, randomColor); // Set the value of the uniform variable to the random color
+
+      gl.clearColor(0, 0, 0, 1);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.drawArrays(gl.TRIANGLES, 0, vertices.length / 2);
+    };
+
+  </script>
+</head>
+<body>
+  <canvas id="webgl-canvas" width="400" height="300"></canvas>
+  <h1>Hello</h1>
+</body>
+</html>
